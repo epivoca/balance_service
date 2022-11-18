@@ -6,12 +6,8 @@ import (
 	"os"
 	"testing"
 
+	"github.com/epivoca/balance_service/utils"
 	_ "github.com/lib/pq"
-)
-
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://root:password@localhost:5432/balance_db?sslmode=disable"
 )
 
 var testQueries *Queries
@@ -19,9 +15,12 @@ var testDB *sql.DB
 
 func TestMain(m *testing.M) {
 
-	var err error
+	config, err := utils.LoadConfig("../..")
+	if err != nil {
+		log.Fatal("Cant't load config", err)
+	}
 
-	testDB, err = sql.Open(dbDriver, dbSource)
+	testDB, err = sql.Open(config.DBDriver, config.DBSource)
 
 	if err != nil {
 		log.Fatal("Service can't connect to the db", err)
