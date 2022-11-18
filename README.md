@@ -82,3 +82,30 @@
     ```bash
     make test
     ```
+
+### Пример запросов в Postman
+
+- Создание аккаунта (POST):
+    ```bash
+    http://localhost:8080/accounts
+    {
+    "owner": "Artem Fomin",
+    "currency": "RUB"
+    }
+    ```
+
+- Получение информации по аккаунту (GET):
+    ```bash
+    http://localhost:8080/accounts/1
+    ```
+
+- Перевод денег из одного аккаунта в другой (POST):
+    ```bash
+    http://localhost:8080/accounts
+    {
+        "from_account_id": 1,
+        "to_account_id": 2,
+        "amount": 100,
+        "currency": "RUB"
+    }
+    ```
