@@ -33,6 +33,10 @@ func (server *Server) creatеTransfer(ctx *gin.Context) {
 		return
 	}
 
+	if !server.positiveBalance(ctx, req.FromAccountID, req.Amount) {
+		return
+	}
+
 	arg := db.TransferTxParams{
 		FromAccountID: req.FromAccountID,
 		ToAccountID:   req.ToAccountID,
@@ -46,6 +50,24 @@ func (server *Server) creatеTransfer(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, result)
+}
+
+func (server *Server) positiveBalance(ctx *gin.Context, accountID int64, amount int64) bool {
+
+	// TODO: get fromaccount balance
+	account, err := server.store.GetAccount(ctx, accountID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return false
+	}
+
+	if account.Balance-amount < 0 {
+		err := fmt.Errorf("account [%d] doesn't have enough money to complete this transaction", accountID)
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return false
+	}
+
+	return true
 }
 
 // TODO: Valid account
@@ -63,6 +85,8 @@ func (server *Server) sameAccountCurrency(ctx *gin.Context, accountID int64, cur
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return false
 	}
+
+	// TODO: validate positive balance after transaction
 
 	return true
 }
