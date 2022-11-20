@@ -47,22 +47,10 @@
     make migrateup
     ```
 
-- Запуск db migration up 1 version:
-
-    ```bash
-    make migrateup1
-    ```
-
 - Запуск db migration down all versions:
 
     ```bash
     make migratedown
-    ```
-
-- Запуск db migration down 1 version:
-
-    ```bash
-    make migratedown1
     ```
 
 ###  Генерация кода для БД (если вносятся изменения в схему бд)
