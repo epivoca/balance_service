@@ -54,7 +54,6 @@ func (server *Server) creatеTransfer(ctx *gin.Context) {
 
 func (server *Server) positiveBalance(ctx *gin.Context, accountID int64, amount int64) bool {
 
-	// TODO: get fromaccount balance
 	account, err := server.store.GetAccount(ctx, accountID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
@@ -85,8 +84,6 @@ func (server *Server) sameAccountCurrency(ctx *gin.Context, accountID int64, cur
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return false
 	}
-
-	// TODO: validate positive balance after transaction
 
 	return true
 }

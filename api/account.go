@@ -72,9 +72,13 @@ type listAccountRequest struct {
 	PageSize int32 `form:"page_size" binding:"required,min=5,max=10"`
 }
 
+// TODO: typo in func name
 func (server *Server) listAccount(ctx *gin.Context) {
+
 	var req listAccountRequest
-	if err := ctx.ShouldBindQuery(&req); err != nil {
+
+	err := ctx.ShouldBindQuery(&req)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
@@ -91,4 +95,39 @@ func (server *Server) listAccount(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, accounts)
+}
+
+type addAccountBalanceRequest struct {
+	ID     int64 `json:"id" binding:"required,min=1"`
+	Amount int64 `json:"amount" binding:"required,gt=0"`
+}
+
+func (server *Server) addAccountBalance(ctx *gin.Context) {
+
+	var req addAccountBalanceRequest
+
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	arg := db.AddAccountBalanceParams{
+		ID:     req.ID,
+		Amount: req.Amount,
+	}
+
+	account, err := server.store.AddAccountBalance(ctx, arg)
+	if err != nil {
+
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, account)
 }
