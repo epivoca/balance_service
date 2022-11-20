@@ -103,6 +103,14 @@
     http://localhost:8080/accounts/1
     ```
 
+- Пополнение баланса аккаунта (POST):
+    ```bash
+    http://localhost:8080/accounts/balance
+    {
+    "id": 1,
+    "amount": 1000
+    }
+    ```
 - Перевод денег из одного аккаунта в другой (POST):
     ```bash
     http://localhost:8080/accounts
