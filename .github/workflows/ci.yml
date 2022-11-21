@@ -24,6 +24,8 @@ jobs:
           POSTGRES_PASSWORD: password
           POSTGRES_DB: balance_db
         # Set health checks to wait until postgres has started
+        ports:
+          5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
