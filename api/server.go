@@ -11,12 +11,12 @@ import (
 
 // Server serves HTTP requests for balance service
 type Server struct {
-	store  *db.Store // to interract with db
+	store  db.Store // to interract with db
 	router *gin.Engine
 }
 
 // NewServer creates a new HTTP service and setup routing
-func NewServer(store *db.Store) *Server {
+func NewServer(store db.Store) *Server {
 
 	server := &Server{store: store}
 	router := gin.Default()
